@@ -15,14 +15,23 @@ export const getInsights = async (req, res) => {
     const prompt = `Total spending is ₹${totalExpense}. Give 1 short financial advice.`;
 
     const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      "https://openrouter.ai/api/v1/chat/completions",
       {
-        contents: [{ parts: [{ text: prompt }] }],
+        model: "openai/gpt-3.5-turbo",
+        messages: [
+          { role: "user", content: prompt }
+        ],
+      },
+      {
+        headers: {
+         Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
+        },
       }
     );
 
     const message =
-      response?.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      response.data.choices?.[0]?.message?.content ||
       "No insight available";
 
     res.json({ message });

@@ -1,41 +1,49 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api/axiosInstance";
+import toast from "react-hot-toast"; // ✅ ADD
 
 function Signup() {
-  const [name,setName] = useState("");
-  const [email,setEmail] = useState("");
-  const [password,setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // ✅ ADD
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(!name || !email || !password){
-      alert("All fields required");
+    if (!name || !email || !password) {
+      toast.error("All fields required ❌"); // ✅ FIX
       return;
     }
 
     try {
+      setLoading(true); // ✅ START LOADING
+
       const res = await API.post("/auth/signup", {
         name,
         email,
-        password
+        password,
       });
 
-      alert(res.data.msg || "Signup successful ✅");
+      toast.success(res.data.msg || "Signup successful ✅"); // ✅ FIX
+
       navigate("/login");
 
     } catch (err) {
       console.log("SIGNUP ERROR:", err.response?.data);
 
-      alert(err.response?.data?.msg || "Signup failed ❌");
+      toast.error(err.response?.data?.msg || "Signup failed ❌"); // ✅ FIX
+    } finally {
+      setLoading(false); // ✅ STOP LOADING
     }
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-      <div className="card p-4 shadow" style={{width:"350px"}}>
+      <div className="card p-4 shadow" style={{ width: "350px" }}>
 
         <h3 className="text-center mb-3">Signup</h3>
 
@@ -45,14 +53,15 @@ function Signup() {
             className="form-control mb-3"
             placeholder="Name"
             value={name}
-            onChange={(e)=>setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
           />
 
           <input
+            type="email"
             className="form-control mb-3"
             placeholder="Email"
             value={email}
-            onChange={(e)=>setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <input
@@ -60,11 +69,14 @@ function Signup() {
             className="form-control mb-3"
             placeholder="Password"
             value={password}
-            onChange={(e)=>setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
-          <button className="btn btn-success w-100">
-            Signup
+          <button
+            className="btn btn-success w-100"
+            disabled={loading} // ✅ DISABLE BUTTON
+          >
+            {loading ? "Signing up..." : "Signup"} {/* ✅ LOADING TEXT */}
           </button>
 
         </form>
