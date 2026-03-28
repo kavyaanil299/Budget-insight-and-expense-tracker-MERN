@@ -3,7 +3,6 @@ import API from "../api/axiosInstance";
 import TransactionList from "../components/TransactionList";
 import IncomeExpenseChart from "../components/IncomeExpenseChart";
 
-
 export default function Dashboard() {
   const [tx, setTx] = useState([]);
   const [title, setTitle] = useState("");
@@ -22,6 +21,7 @@ export default function Dashboard() {
     fetchTransactions();
   }, []);
 
+  // ✅ FETCH
   const fetchTransactions = async () => {
     try {
       const res = await API.get("/transactions");
@@ -44,6 +44,7 @@ export default function Dashboard() {
       let res;
 
       if (editId) {
+        // UPDATE
         res = await API.put(`/transactions/${editId}`, {
           title,
           amount: Number(amount),
@@ -54,8 +55,8 @@ export default function Dashboard() {
         setTx(tx.map((t) => (t._id === editId ? res.data : t)));
         alert("Updated ✅");
         setEditId(null);
-
       } else {
+        // ADD
         res = await API.post("/transactions", {
           title,
           amount: Number(amount),
@@ -69,7 +70,6 @@ export default function Dashboard() {
 
       setTitle("");
       setAmount("");
-
     } catch (err) {
       console.log(err);
       alert("Error ❌");
@@ -130,17 +130,18 @@ export default function Dashboard() {
     link.click();
   };
 
-  
-
   // ✅ FILTER
   const filteredTx = tx.filter((t) => {
     const date = new Date(t.createdAt);
+
     if (view === "monthly" && month) {
       return date.getMonth() + 1 === Number(month);
     }
+
     return true;
   });
 
+  // ✅ CALCULATIONS
   const income = filteredTx
     .filter((t) => t.type === "income")
     .reduce((a, b) => a + b.amount, 0);
@@ -196,11 +197,13 @@ export default function Dashboard() {
             Income ₹{income}
           </div>
         </div>
+
         <div className="col-md-4">
           <div className="card bg-danger text-white p-3">
             Expense ₹{expense}
           </div>
         </div>
+
         <div className="col-md-4">
           <div className="card bg-primary text-white p-3">
             Balance ₹{balance}
@@ -208,26 +211,80 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* FORM */}
+      {/* ✅ FORM FIXED */}
       <form onSubmit={add} className="row g-2 mb-4">
-        <input
-          className="form-control col"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          type="number"
-          className="form-control col"
-          placeholder="Amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
+        <div className="col-md-3">
+          <input
+            className="form-control"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
 
-        <button className="btn btn-success col">
-          {editId ? "Update" : "Add"}
-        </button>
+        <div className="col-md-2">
+          <input
+            type="number"
+            className="form-control"
+            placeholder="Amount"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </div>
+
+        <div className="col-md-2">
+          <select
+            className="form-select"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          >
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+        </div>
+
+        <div className="col-md-3">
+          <select
+            className="form-select"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option>Food</option>
+            <option>Transport</option>
+            <option>Bills</option>
+            <option>Entertainment</option>
+            <option>Salary</option>
+          </select>
+        </div>
+
+        <div className="col-md-2">
+          <button className="btn btn-success w-100">
+            {editId ? "Update" : "Add"}
+          </button>
+        </div>
       </form>
+
+      {/* MONTH FILTER */}
+      {view === "monthly" && (
+        <select
+          className="form-select mb-3"
+          onChange={(e) => setMonth(e.target.value)}
+        >
+          <option value="">All Months</option>
+          <option value="1">Jan</option>
+          <option value="2">Feb</option>
+          <option value="3">Mar</option>
+          <option value="4">Apr</option>
+          <option value="5">May</option>
+          <option value="6">Jun</option>
+          <option value="7">Jul</option>
+          <option value="8">Aug</option>
+          <option value="9">Sep</option>
+          <option value="10">Oct</option>
+          <option value="11">Nov</option>
+          <option value="12">Dec</option>
+        </select>
+      )}
 
       {/* LIST */}
       <TransactionList
@@ -239,7 +296,7 @@ export default function Dashboard() {
       {/* CHART */}
       <IncomeExpenseChart transactions={filteredTx} />
 
-      {/* 🔥 BUTTONS FIX */}
+      {/* BUTTONS */}
       <div className="mt-3">
         <button className="btn btn-info me-2" onClick={getAI}>
           Get AI Insight
@@ -248,8 +305,6 @@ export default function Dashboard() {
         <button className="btn btn-success me-2" onClick={exportCSV}>
           Export CSV
         </button>
-
-        
       </div>
 
       {/* AI RESULT */}
