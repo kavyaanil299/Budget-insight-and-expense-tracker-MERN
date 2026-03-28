@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://budget-insight-and-expense-tracker-mern.onrender.com"
+  baseURL:  "https://budget-insight-and-expense-tracker-mern.onrender.com/api"
 });
 
 API.interceptors.request.use((req) => {
