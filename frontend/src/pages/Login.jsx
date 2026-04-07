@@ -27,18 +27,15 @@ export default function Login() {
 
       console.log("LOGIN RESPONSE:", res.data);
 
-      // ✅ IMPORTANT FIX (ensure token exists)
-     if (res.data.token) {
+   if (res.data.token) {
   localStorage.setItem("token", res.data.token);
-
-  alert("Token saved: " + res.data.token); // ✅ DEBUG
 } else {
-  alert("NO TOKEN RECEIVED ❌");
+  alert("Login failed ❌");
+  return;
 }
 
-      alert("Login success ✅");
 nav("/dashboard");
-window.location.reload();
+
 
     } catch (err) {
       console.log("LOGIN ERROR:", err.response?.data || err.message);
