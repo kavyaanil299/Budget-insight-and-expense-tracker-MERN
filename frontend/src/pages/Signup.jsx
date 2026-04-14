@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../api/axiosInstance";
-import toast from "react-hot-toast"; // ✅ ADD
+import toast from "react-hot-toast"; 
 
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false); // ✅ ADD
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -15,12 +15,12 @@ function Signup() {
     e.preventDefault();
 
     if (!name || !email || !password) {
-      toast.error("All fields required ❌"); // ✅ FIX
+      toast.error("All fields required ❌"); 
       return;
     }
 
     try {
-      setLoading(true); // ✅ START LOADING
+      setLoading(true); 
 
       const res = await API.post("/auth/signup", {
         name,
@@ -28,14 +28,14 @@ function Signup() {
         password,
       });
 
-      toast.success(res.data.msg || "Signup successful ✅"); // ✅ FIX
+      toast.success(res.data.msg || "Signup successful ✅"); 
 
       navigate("/login");
 
     } catch (err) {
       console.log("SIGNUP ERROR:", err.response?.data);
 
-      toast.error(err.response?.data?.msg || "Signup failed ❌"); // ✅ FIX
+      toast.error(err.response?.data?.msg || "Signup failed ❌"); 
     } finally {
       setLoading(false); // ✅ STOP LOADING
     }
@@ -74,9 +74,9 @@ function Signup() {
 
           <button
             className="btn btn-success w-100"
-            disabled={loading} // ✅ DISABLE BUTTON
+            disabled={loading} 
           >
-            {loading ? "Signing up..." : "Signup"} {/* ✅ LOADING TEXT */}
+            {loading ? "Signing up..." : "Signup"} 
           </button>
 
         </form>

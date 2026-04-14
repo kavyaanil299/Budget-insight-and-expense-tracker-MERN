@@ -5,15 +5,16 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
 import Home from "./pages/Home";
+import About from "./pages/About";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Reports from "./pages/Reports";
-
+import Admin from "./pages/Admin";
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
 
-  // ✅ listen for changes
+  // listen for changes
   useEffect(() => {
     const checkToken = () => {
       setToken(localStorage.getItem("token"));
@@ -32,10 +33,11 @@ function App() {
       <div className="flex-grow-1 container mt-3">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+<Route path="/admin" element={<Admin />} />
 
-          {/* ✅ FIXED */}
           <Route
             path="/dashboard"
             element={token ? <Dashboard /> : <Navigate to="/login" />}

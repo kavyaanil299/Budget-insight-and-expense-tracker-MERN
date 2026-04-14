@@ -21,7 +21,6 @@ export default function Dashboard() {
     fetchTransactions();
   }, []);
 
-  // ✅ FETCH
   const fetchTransactions = async () => {
     try {
       const res = await API.get("/transactions");
@@ -31,7 +30,6 @@ export default function Dashboard() {
     }
   };
 
-  // ✅ ADD / UPDATE
   const add = async (e) => {
     e.preventDefault();
 
@@ -44,7 +42,6 @@ export default function Dashboard() {
       let res;
 
       if (editId) {
-        // UPDATE
         res = await API.put(`/transactions/${editId}`, {
           title,
           amount: Number(amount),
@@ -56,7 +53,6 @@ export default function Dashboard() {
         alert("Updated ✅");
         setEditId(null);
       } else {
-        // ADD
         res = await API.post("/transactions", {
           title,
           amount: Number(amount),
@@ -76,7 +72,6 @@ export default function Dashboard() {
     }
   };
 
-  // ✅ DELETE
   const remove = async (id) => {
     try {
       await API.delete(`/transactions/${id}`);
@@ -86,7 +81,6 @@ export default function Dashboard() {
     }
   };
 
-  // ✅ EDIT
   const edit = (t) => {
     setTitle(t.title);
     setAmount(t.amount);
@@ -95,7 +89,6 @@ export default function Dashboard() {
     setEditId(t._id);
   };
 
-  // ✅ AI
   const getAI = async () => {
     try {
       const res = await API.post("/ai", { transactions: tx });
@@ -106,7 +99,6 @@ export default function Dashboard() {
     }
   };
 
-  // ✅ CSV EXPORT
   const exportCSV = () => {
     const rows = [["Title", "Amount", "Type", "Category", "Date"]];
 
@@ -130,7 +122,6 @@ export default function Dashboard() {
     link.click();
   };
 
-  // ✅ FILTER
   const filteredTx = tx.filter((t) => {
     const date = new Date(t.createdAt);
 
@@ -141,7 +132,6 @@ export default function Dashboard() {
     return true;
   });
 
-  // ✅ CALCULATIONS
   const income = filteredTx
     .filter((t) => t.type === "income")
     .reduce((a, b) => a + b.amount, 0);
@@ -177,6 +167,8 @@ export default function Dashboard() {
         </button>
       </div>
 
+
+
       {/* BUDGET */}
       <div className="card p-3 mb-4 shadow">
         <h5>Set Budget</h5>
@@ -186,7 +178,7 @@ export default function Dashboard() {
           onChange={(e) => setBudget(Number(e.target.value))}
         />
         <h6>
-          Budget: ₹{budget} | Remaining: ₹{budget - expense}
+          Budget: ₹{budget} | Remaining: ₹{Math.max(0, budget - expense)}
         </h6>
       </div>
 
@@ -211,7 +203,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ✅ FORM FIXED */}
+      {/* FORM */}
       <form onSubmit={add} className="row g-2 mb-4">
         <div className="col-md-3">
           <input
@@ -264,39 +256,14 @@ export default function Dashboard() {
         </div>
       </form>
 
-      {/* MONTH FILTER */}
-      {view === "monthly" && (
-        <select
-          className="form-select mb-3"
-          onChange={(e) => setMonth(e.target.value)}
-        >
-          <option value="">All Months</option>
-          <option value="1">Jan</option>
-          <option value="2">Feb</option>
-          <option value="3">Mar</option>
-          <option value="4">Apr</option>
-          <option value="5">May</option>
-          <option value="6">Jun</option>
-          <option value="7">Jul</option>
-          <option value="8">Aug</option>
-          <option value="9">Sep</option>
-          <option value="10">Oct</option>
-          <option value="11">Nov</option>
-          <option value="12">Dec</option>
-        </select>
-      )}
-
-      {/* LIST */}
       <TransactionList
         transactions={filteredTx}
         remove={remove}
         edit={edit}
       />
 
-      {/* CHART */}
       <IncomeExpenseChart transactions={filteredTx} />
 
-      {/* BUTTONS */}
       <div className="mt-3">
         <button className="btn btn-info me-2" onClick={getAI}>
           Get AI Insight
@@ -307,11 +274,8 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* AI RESULT */}
       {insight && (
-        <div className="alert alert-warning mt-3">
-          {insight}
-        </div>
+        <div className="alert alert-warning mt-3">{insight}</div>
       )}
     </div>
   );

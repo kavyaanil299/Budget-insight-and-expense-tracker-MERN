@@ -33,7 +33,7 @@ function IncomeExpenseChart({ transactions = [] }) {
       {
         label: "Amount",
         data: [income, expense],
-        backgroundColor: ["#198754", "#dc3545"], // Bootstrap colors
+        backgroundColor: ["#198754", "#dc3545"], 
       },
     ],
   };

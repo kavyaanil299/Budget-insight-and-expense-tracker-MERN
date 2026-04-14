@@ -23,8 +23,17 @@ export default function Navbar() {
 
           {token ? (
             <>
+              <Link className="btn btn-warning me-2" to="/about">
+                About
+              </Link>
               <Link className="btn btn-warning me-2" to="/dashboard">
                 Dashboard
+              </Link>
+              <Link className="btn btn-dark me-2" to="/admin">
+                Admin
+              </Link>
+              <Link className="btn btn-info me-2" to="/reports">
+                Reports
               </Link>
               <button className="btn btn-danger" onClick={logout}>
                 Logout

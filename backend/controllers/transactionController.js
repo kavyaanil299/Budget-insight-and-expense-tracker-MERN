@@ -14,7 +14,11 @@ export const addTransaction = async (req, res) => {
       amount,
       type,
       category,
-      userId: req.user,
+
+      // ✅ FIXED
+      userId: req.user.id,
+      userEmail: req.user.email,
+      paymentId: "PAY" + Date.now(),
     });
 
     res.status(201).json(t);
@@ -24,11 +28,11 @@ export const addTransaction = async (req, res) => {
   }
 };
 
-// ✅ GET ALL TRANSACTIONS
+// ✅ GET USER TRANSACTIONS
 export const getTransactions = async (req, res) => {
   try {
     const data = await Transaction.find({
-      userId: req.user,
+      userId: req.user.id,
     }).sort({ createdAt: -1 });
 
     res.json(data);
@@ -43,7 +47,7 @@ export const deleteTransaction = async (req, res) => {
   try {
     const deleted = await Transaction.findOneAndDelete({
       _id: req.params.id,
-      userId: req.user,
+      userId: req.user.id,
     });
 
     if (!deleted) {
@@ -57,7 +61,7 @@ export const deleteTransaction = async (req, res) => {
   }
 };
 
-// ✅ UPDATE TRANSACTION (🔥 NEW - IMPORTANT)
+// ✅ UPDATE TRANSACTION
 export const updateTransaction = async (req, res) => {
   try {
     const { title, amount, type, category } = req.body;
@@ -69,7 +73,7 @@ export const updateTransaction = async (req, res) => {
     const updated = await Transaction.findOneAndUpdate(
       {
         _id: req.params.id,
-        userId: req.user,
+        userId: req.user.id,
       },
       {
         title,

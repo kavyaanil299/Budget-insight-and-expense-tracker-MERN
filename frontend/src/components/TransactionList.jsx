@@ -21,7 +21,7 @@ const TransactionList = ({ transactions = [], remove, edit }) => {
                 ₹{t.amount || 0}
               </span>
 
-              {/* ✅ EDIT BUTTON */}
+              {/* EDIT BUTTON */}
               <button
                 className="btn btn-sm btn-warning ms-2"
                 onClick={() => edit(t)}
@@ -29,7 +29,7 @@ const TransactionList = ({ transactions = [], remove, edit }) => {
                 Edit
               </button>
 
-              {/* ✅ DELETE BUTTON */}
+              {/*  DELETE BUTTON */}
               <button
                 className="btn btn-sm btn-danger ms-2"
                 onClick={() => remove(t._id)}

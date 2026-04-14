@@ -1,8 +1,9 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import sendEmail from "../utils/sendEmail.js";
 
-// ✅ SIGNUP
+// ================= SIGNUP =================
 export const signup = async (req, res) => {
   try {
     console.log("SIGNUP BODY:", req.body);
@@ -14,19 +15,17 @@ export const signup = async (req, res) => {
       return res.status(400).json({ msg: "All fields required" });
     }
 
-    // ✅ EMAIL FORMAT CHECK (NEW FIX)
     if (!email.includes("@")) {
       return res.status(400).json({ msg: "Invalid email format" });
     }
 
-    // ✅ PASSWORD LENGTH CHECK (BEST PRACTICE)
     if (password.length < 6) {
       return res
         .status(400)
         .json({ msg: "Password must be at least 6 characters" });
     }
 
-    // ✅ CHECK EXISTING USER
+    // ✅ CHECK USER
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ msg: "User already exists" });
@@ -42,6 +41,14 @@ export const signup = async (req, res) => {
       password: hashed,
     });
 
+    // ✅ SEND EMAIL (🔥 IMPORTANT)
+    await sendEmail(
+      email,
+      "Welcome to SmartSpend 🎉",
+      `Hello ${name}, your account has been created successfully!`
+    );
+
+    // ✅ RESPONSE
     res.status(201).json({
       msg: "User registered successfully ✅",
       user: {
@@ -49,13 +56,14 @@ export const signup = async (req, res) => {
         email: user.email,
       },
     });
+
   } catch (err) {
     console.log("SIGNUP ERROR:", err.message);
     res.status(500).json({ msg: "Server error" });
   }
 };
 
-// ✅ LOGIN
+// ================= LOGIN =================
 export const login = async (req, res) => {
   try {
     console.log("LOGIN BODY:", req.body);
@@ -69,14 +77,12 @@ export const login = async (req, res) => {
 
     // ✅ FIND USER
     const user = await User.findOne({ email });
-
     if (!user) {
       return res.status(400).json({ msg: "Invalid email" });
     }
 
     // ✅ CHECK PASSWORD
     const match = await bcrypt.compare(password, user.password);
-
     if (!match) {
       return res.status(400).json({ msg: "Invalid password" });
     }
@@ -88,6 +94,7 @@ export const login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
+    // ✅ RESPONSE
     res.json({
       token,
       user: {
@@ -96,6 +103,7 @@ export const login = async (req, res) => {
         email: user.email,
       },
     });
+
   } catch (err) {
     console.log("LOGIN ERROR:", err.message);
     res.status(500).json({ msg: "Server error" });
