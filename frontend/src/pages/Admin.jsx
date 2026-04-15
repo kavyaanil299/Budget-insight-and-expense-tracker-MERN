@@ -10,13 +10,9 @@ export default function Admin() {
 
   const fetchAdminData = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const res = await API.get("/admin/transactions");
 
-      const res = await API.get("/admin/transactions", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      console.log("✅ ADMIN DATA:", res.data);
 
       setData(res.data);
     } catch (err) {
