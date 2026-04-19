@@ -18,13 +18,13 @@ export default function Admin() {
     }
   };
 
-  // ✅ TOTAL AMOUNT
+  //  TOTAL AMOUNT
   const totalAmount = data.reduce((sum, t) => sum + t.amount, 0);
 
   return (
     <div className="container mt-4">
 
-      {/* ✅ CARD START */}
+      {/*  CARD START */}
       <div className="card shadow-lg p-4">
 
         {/* TITLE */}
@@ -68,7 +68,7 @@ export default function Admin() {
         </table>
 
       </div>
-      {/* ✅ CARD END */}
+      {/*  CARD END */}
 
     </div>
   );

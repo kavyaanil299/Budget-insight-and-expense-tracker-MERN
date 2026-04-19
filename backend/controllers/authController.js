@@ -10,7 +10,7 @@ export const signup = async (req, res) => {
 
     const { name, email, password } = req.body;
 
-    // ✅ VALIDATION
+    // VALIDATION
     if (!name || !email || !password) {
       return res.status(400).json({ msg: "All fields required" });
     }
@@ -25,37 +25,37 @@ export const signup = async (req, res) => {
       });
     }
 
-    // ✅ CHECK USER
+    // CHECK USER
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ msg: "User already exists" });
     }
 
-    // ✅ HASH PASSWORD
+    // HASH PASSWORD
     const hashed = await bcrypt.hash(password, 10);
 
-    // ✅ SAVE USER
+    // SAVE USER
     const user = await User.create({
       name,
       email,
       password: hashed,
     });
 
-    // ✅ SEND EMAIL (WELCOME)
+    // SEND EMAIL (WELCOME)
     await sendEmail(
       email,
       "Welcome to SmartSpend 🎉",
       `Hello ${name}, your account has been created successfully!`
     );
 
-    // ✅ TOKEN (optional but better UX)
+    //  TOKEN 
     const token = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    // ✅ RESPONSE
+    // RESPONSE
     res.status(201).json({
       msg: "User registered successfully ✅",
       token,
@@ -79,38 +79,38 @@ export const login = async (req, res) => {
 
     const { email, password } = req.body;
 
-    // ✅ VALIDATION
+    // VALIDATION
     if (!email || !password) {
       return res.status(400).json({ msg: "All fields required" });
     }
 
-    // ✅ FIND USER
+    // FIND USER
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ msg: "Invalid email" });
     }
 
-    // ✅ CHECK PASSWORD
+    // CHECK PASSWORD
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       return res.status(400).json({ msg: "Invalid password" });
     }
 
-    // ✅ TOKEN
+    // TOKEN
     const token = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    // ✅ SEND EMAIL (LOGIN ALERT 🔐)
+    //  SEND EMAIL (LOGIN ALERT )
     await sendEmail(
       user.email,
-      "Login Alert 🔐",
+      "Login Alert ",
       `Hello ${user.name}, you have successfully logged in to SmartSpend.`
     );
 
-    // ✅ RESPONSE
+    //  RESPONSE
     res.json({
       token,
       user: {

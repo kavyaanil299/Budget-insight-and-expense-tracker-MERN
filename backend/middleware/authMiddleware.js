@@ -13,7 +13,7 @@ export const protect = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // 🔥 FULL USER FETCH
+    // FULL USER FETCH
     const user = await User.findById(decoded.id).select("-password");
 
     req.user = user;

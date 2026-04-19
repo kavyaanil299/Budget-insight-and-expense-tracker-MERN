@@ -13,7 +13,7 @@ import Admin from "./pages/Admin";
 
 function App() {
 
-  // ✅ direct check (NO useState)
+  //  direct check (NO useState)
   const isAuth = localStorage.getItem("token");
 
   return (
@@ -31,7 +31,7 @@ function App() {
           {/* Admin */}
           <Route path="/admin" element={<Admin />} />
 
-          {/* ✅ Protected Route */}
+          {/* Protected Route */}
           <Route
             path="/dashboard"
             element={

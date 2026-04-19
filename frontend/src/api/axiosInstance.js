@@ -4,12 +4,12 @@ const API = axios.create({
   baseURL: "https://budget-insight-and-expense-tracker-mern.onrender.com/api",
 });
 
-// 🔐 REQUEST INTERCEPTOR (ADD TOKEN AUTOMATICALLY)
+// REQUEST INTERCEPTOR (ADD TOKEN AUTOMATICALLY)
 API.interceptors.request.use(
   (req) => {
     const token = localStorage.getItem("token");
 
-    console.log("🔐 SENDING TOKEN:", token);
+    console.log(" SENDING TOKEN:", token);
 
     if (token) {
       req.headers.Authorization = `Bearer ${token}`;
@@ -22,14 +22,14 @@ API.interceptors.request.use(
   }
 );
 
-// ❌ RESPONSE ERROR HANDLING (OPTIONAL BUT GOOD)
+//  RESPONSE ERROR HANDLING (OPTIONAL BUT GOOD)
 API.interceptors.response.use(
   (res) => res,
   (error) => {
     if (error.response) {
-      console.log("❌ API ERROR:", error.response.data);
+      console.log(" API ERROR:", error.response.data);
 
-      // 🔒 Token expired / invalid
+      //  Token expired / invalid
       if (error.response.status === 401) {
         alert("Session expired. Please login again.");
         localStorage.removeItem("token");

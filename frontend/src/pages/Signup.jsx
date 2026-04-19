@@ -15,7 +15,7 @@ function Signup() {
     e.preventDefault();
 
     if (!name || !email || !password) {
-      toast.error("All fields required ❌"); 
+      toast.error("All fields required "); 
       return;
     }
 
@@ -28,16 +28,16 @@ function Signup() {
         password,
       });
 
-      toast.success(res.data.msg || "Signup successful ✅"); 
+      toast.success(res.data.msg || "Signup successful "); 
 
       navigate("/login");
 
     } catch (err) {
       console.log("SIGNUP ERROR:", err.response?.data);
 
-      toast.error(err.response?.data?.msg || "Signup failed ❌"); 
+      toast.error(err.response?.data?.msg || "Signup failed "); 
     } finally {
-      setLoading(false); // ✅ STOP LOADING
+      setLoading(false); // STOP LOADING
     }
   };
 

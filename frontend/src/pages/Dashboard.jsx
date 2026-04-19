@@ -50,7 +50,7 @@ export default function Dashboard() {
         });
 
         setTx(tx.map((t) => (t._id === editId ? res.data : t)));
-        alert("Updated ✅");
+        alert("Updated ");
         setEditId(null);
       } else {
         res = await API.post("/transactions", {
@@ -61,14 +61,14 @@ export default function Dashboard() {
         });
 
         setTx([res.data, ...tx]);
-        alert("Added ✅");
+        alert("Added ");
       }
 
       setTitle("");
       setAmount("");
     } catch (err) {
       console.log(err);
-      alert("Error ❌");
+      alert("Error ");
     }
   };
 
@@ -95,7 +95,7 @@ export default function Dashboard() {
       setInsight(res.data.message);
     } catch (err) {
       console.log(err);
-      alert("AI Error ❌");
+      alert("AI Error ");
     }
   };
 

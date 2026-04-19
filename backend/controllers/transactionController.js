@@ -1,6 +1,6 @@
 import Transaction from "../models/Transaction.js";
 
-// ✅ ADD TRANSACTION
+// ADD TRANSACTION
 export const addTransaction = async (req, res) => {
   try {
     const { title, amount, type, category } = req.body;
@@ -15,7 +15,7 @@ export const addTransaction = async (req, res) => {
       type,
       category,
 
-      // ✅ FIXED
+      //  FIXED
       userId: req.user.id,
       userEmail: req.user.email,
       paymentId: "PAY" + Date.now(),
@@ -28,7 +28,7 @@ export const addTransaction = async (req, res) => {
   }
 };
 
-// ✅ GET USER TRANSACTIONS
+//  GET USER TRANSACTIONS
 export const getTransactions = async (req, res) => {
   try {
     const data = await Transaction.find({
@@ -42,7 +42,7 @@ export const getTransactions = async (req, res) => {
   }
 };
 
-// ✅ DELETE TRANSACTION
+//  DELETE TRANSACTION
 export const deleteTransaction = async (req, res) => {
   try {
     const deleted = await Transaction.findOneAndDelete({
@@ -61,7 +61,7 @@ export const deleteTransaction = async (req, res) => {
   }
 };
 
-// ✅ UPDATE TRANSACTION
+//UPDATE TRANSACTION
 export const updateTransaction = async (req, res) => {
   try {
     const { title, amount, type, category } = req.body;
