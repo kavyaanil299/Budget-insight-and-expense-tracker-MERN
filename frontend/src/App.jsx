@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -11,19 +10,11 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Reports from "./pages/Reports";
 import Admin from "./pages/Admin";
+
 function App() {
-  const [token, setToken] = useState(localStorage.getItem("token"));
 
-  // listen for changes
-  useEffect(() => {
-    const checkToken = () => {
-      setToken(localStorage.getItem("token"));
-    };
-
-    window.addEventListener("storage", checkToken);
-
-    return () => window.removeEventListener("storage", checkToken);
-  }, []);
+  // ✅ direct check (NO useState)
+  const isAuth = localStorage.getItem("token");
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -36,11 +27,16 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-<Route path="/admin" element={<Admin />} />
 
+          {/* Admin */}
+          <Route path="/admin" element={<Admin />} />
+
+          {/* ✅ Protected Route */}
           <Route
             path="/dashboard"
-            element={token ? <Dashboard /> : <Navigate to="/login" />}
+            element={
+              isAuth ? <Dashboard /> : <Navigate to="/login" />
+            }
           />
 
           <Route path="/reports" element={<Reports />} />

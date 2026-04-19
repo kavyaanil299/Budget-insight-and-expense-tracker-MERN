@@ -27,19 +27,18 @@ export default function Login() {
 
       console.log("LOGIN RESPONSE:", res.data);
 
-   if (res.data.token) {
-  localStorage.setItem("token", res.data.token);
-} else {
-  alert("Login failed ❌");
-  return;
-}
+      if (res.data.token) {
+        // ✅ SAVE TOKEN
+        localStorage.setItem("token", res.data.token);
 
-nav("/dashboard");
-
+        // 🔥 FORCE RELOAD (IMPORTANT)
+        window.location.href = "/dashboard";
+      } else {
+        alert("Login failed ❌");
+      }
 
     } catch (err) {
       console.log("LOGIN ERROR:", err.response?.data || err.message);
-
       alert(err.response?.data?.msg || "Login failed ❌");
     }
 

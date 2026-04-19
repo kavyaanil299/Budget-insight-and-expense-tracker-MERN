@@ -20,9 +20,9 @@ export const signup = async (req, res) => {
     }
 
     if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ msg: "Password must be at least 6 characters" });
+      return res.status(400).json({
+        msg: "Password must be at least 6 characters",
+      });
     }
 
     // ✅ CHECK USER
@@ -41,18 +41,27 @@ export const signup = async (req, res) => {
       password: hashed,
     });
 
-    // ✅ SEND EMAIL (🔥 IMPORTANT)
+    // ✅ SEND EMAIL (WELCOME)
     await sendEmail(
       email,
       "Welcome to SmartSpend 🎉",
       `Hello ${name}, your account has been created successfully!`
     );
 
+    // ✅ TOKEN (optional but better UX)
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
     // ✅ RESPONSE
     res.status(201).json({
       msg: "User registered successfully ✅",
+      token,
       user: {
         id: user._id,
+        name: user.name,
         email: user.email,
       },
     });
@@ -92,6 +101,13 @@ export const login = async (req, res) => {
       { id: user._id },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
+    );
+
+    // ✅ SEND EMAIL (LOGIN ALERT 🔐)
+    await sendEmail(
+      user.email,
+      "Login Alert 🔐",
+      `Hello ${user.name}, you have successfully logged in to SmartSpend.`
     );
 
     // ✅ RESPONSE
