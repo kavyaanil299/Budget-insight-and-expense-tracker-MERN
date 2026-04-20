@@ -98,11 +98,13 @@ export const login = async (req, res) => {
 
     // TOKEN
     const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
-
+  {
+    id: user._id,
+    email: user.email   
+  },
+  process.env.JWT_SECRET,
+  { expiresIn: "7d" }
+);
     //  SEND EMAIL (LOGIN ALERT )
     await sendEmail(
       user.email,
