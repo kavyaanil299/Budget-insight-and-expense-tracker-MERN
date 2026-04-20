@@ -13,17 +13,26 @@ connectDB();
 
 const app = express();
 
+
 app.use(cors({
-  origin: ["http://localhost:5173", "https://your-frontend-url.vercel.app"]
+  origin: [
+    "http://localhost:5173",
+    "https://budget-insight-and-expense-tracker-mern-r6i3-qzz5ioaod.vercel.app"
+  ],
+  credentials: true
 }));
+
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/admin", adminRoutes);
+
 const PORT = process.env.PORT || 5000;
+
 app.get("/", (req, res) => {
   res.send("Backend is running successfully ");
 });
+
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
