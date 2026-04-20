@@ -1,25 +1,29 @@
 import Transaction from "../models/Transaction.js";
-
+import User from "../models/User.js";
 // ADD TRANSACTION
 export const addTransaction = async (req, res) => {
   try {
-    const { title, amount, type, category } = req.body;
+    console.log("REQ.USER:", req.user); 
 
-    if (!title || !amount || !type) {
-      return res.status(400).json({ msg: "All fields required" });
+    if (!req.user) {
+      return res.status(401).json({ msg: "User not authenticated" });
     }
+const { title, amount, type, category } = req.body;
 
-    const t = await Transaction.create({
-      title,
-      amount,
-      type,
-      category,
+if (!title || !amount || !type) {
+  return res.status(400).json({ msg: "All fields required" });
+}
 
-      //  FIXED
-      userId: req.user.id,
-      userEmail: req.user.email,
-      paymentId: "PAY" + Date.now(),
-    });
+const t = await Transaction.create({
+  title,
+  amount: Number(amount),
+  type,
+  category,
+  userId: req.user.id,
+  userEmail: req.user.email,
+  paymentId: "PAY" + Date.now(),
+});
+    console.log("CREATED:", t); 
 
     res.status(201).json(t);
   } catch (err) {
@@ -27,7 +31,6 @@ export const addTransaction = async (req, res) => {
     res.status(500).json({ msg: "Error adding transaction" });
   }
 };
-
 //  GET USER TRANSACTIONS
 export const getTransactions = async (req, res) => {
   try {

@@ -6,14 +6,17 @@ const transactionSchema = new mongoose.Schema(
     amount: Number,
     type: String,
     category: String,
+
     paymentId: String,
 
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", 
+      ref: "User",
     },
-      userEmail: {
+
+    userEmail: {
       type: String,
+    },
   },
   { timestamps: true }
 );

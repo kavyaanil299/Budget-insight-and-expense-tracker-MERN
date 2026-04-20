@@ -15,10 +15,9 @@ export const signup = async (req, res) => {
       return res.status(400).json({ msg: "All fields required" });
     }
 
-    if (!email.includes("@")) {
-      return res.status(400).json({ msg: "Invalid email format" });
-    }
-
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+  return res.status(400).json({ msg: "Invalid email format" });
+}
     if (password.length < 6) {
       return res.status(400).json({
         msg: "Password must be at least 6 characters",

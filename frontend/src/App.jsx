@@ -13,8 +13,8 @@ import Admin from "./pages/Admin";
 
 function App() {
 
-  //  direct check (NO useState)
-  const isAuth = localStorage.getItem("token");
+  
+  const isAuth = !!localStorage.getItem("token");
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -28,8 +28,12 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
 
-          {/* Admin */}
-          <Route path="/admin" element={<Admin />} />
+          <Route
+            path="/admin"
+            element={
+              isAuth ? <Admin /> : <Navigate to="/login" />
+            }
+          />
 
           {/* Protected Route */}
           <Route

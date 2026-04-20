@@ -1,8 +1,7 @@
 import User from "../models/User.js";
 export const adminOnly = (req, res, next) => {
   try {
-    // no DB call needed
-    if (!req.user.isAdmin) {
+    if (!req.user || !req.user.isAdmin) {
       return res.status(403).json({ msg: "Admin only" });
     }
 
