@@ -17,11 +17,12 @@ const sendEmail = async (to, subject, text) => {
       text,
     };
 
-    await transporter.sendMail(mailOptions);
+    const info = await transporter.sendMail(mailOptions);
 
-    console.log("Email sent ");
-  } catch (error) {
-    console.log("Email error ", error.message);
+    console.log("EMAIL SENT:", info.response);
+
+  } catch (err) {
+    console.log("EMAIL ERROR:", err.message);
   }
 };
 
