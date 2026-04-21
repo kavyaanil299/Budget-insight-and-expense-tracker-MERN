@@ -13,11 +13,10 @@ connectDB();
 
 const app = express();
 
-
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://budget-insight-and-expense-tracker-mern-r6i3-qzz5ioaod.vercel.app"
+    "https://budget-insight-and-expense-tracker-ecru.vercel.app"
   ],
   credentials: true
 }));
